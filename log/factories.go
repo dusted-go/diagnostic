@@ -1,6 +1,6 @@
 package log
 
-import "github.com/dusted-go/diagnostics/trace"
+import "github.com/dusted-go/diagnostic/trace"
 
 // New creates a new default log event.
 func New(formatter Formatter, exporter Exporter, minLevel Level) Event {

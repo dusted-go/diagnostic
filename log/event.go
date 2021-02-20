@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/dusted-go/diagnostics/trace"
+	"github.com/dusted-go/diagnostic/trace"
 )
 
 // Event allows to create and write an event to an output source.
