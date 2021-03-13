@@ -3,8 +3,21 @@ package log
 import "github.com/dusted-go/diagnostic/trace"
 
 // New creates a new default log event.
-func New(formatter Formatter, exporter Exporter, minLevel Level) Event {
+func New(filter Filter, formatter Formatter, exporter Exporter, minLevel Level) Event {
+	if filter == nil {
+		filter = &NoFilter{}
+	}
+
+	if formatter == nil {
+		formatter = &Console{}
+	}
+
+	if exporter == nil {
+		exporter = &StdoutExporter{}
+	}
+
 	return event{
+		filter:         filter,
 		formatter:      formatter,
 		exporter:       exporter,
 		minLevel:       minLevel,
@@ -14,9 +27,22 @@ func New(formatter Formatter, exporter Exporter, minLevel Level) Event {
 }
 
 // NewWithTrace creates a new default log event with initialised trace IDs.
-func NewWithTrace(formatter Formatter, exporter Exporter, minLevel Level) Event {
+func NewWithTrace(filter Filter, formatter Formatter, exporter Exporter, minLevel Level) Event {
+	if filter == nil {
+		filter = &NoFilter{}
+	}
+
+	if formatter == nil {
+		formatter = &Console{}
+	}
+
+	if exporter == nil {
+		exporter = &StdoutExporter{}
+	}
+
 	traceID, spanID := trace.DefaultGenerator.NewTraceIDs()
 	return event{
+		filter:         filter,
 		formatter:      formatter,
 		exporter:       exporter,
 		minLevel:       minLevel,
@@ -29,5 +55,5 @@ func NewWithTrace(formatter Formatter, exporter Exporter, minLevel Level) Event 
 
 var (
 	// DefaultEvent returns a default log event.
-	DefaultEvent = New(&Console{}, &StdoutExporter{}, Debug)
+	DefaultEvent = New(&NoFilter{}, &Console{}, &StdoutExporter{}, Debug)
 )

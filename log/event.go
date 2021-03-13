@@ -56,6 +56,7 @@ type httpRequest struct {
 }
 
 type event struct {
+	filter         Filter
 	formatter      Formatter
 	exporter       Exporter
 	minLevel       Level
@@ -72,12 +73,26 @@ type event struct {
 	message        string
 }
 
+func (e event) SetFilter(filter Filter) Event {
+	if filter == nil {
+		filter = &NoFilter{}
+	}
+	e.filter = filter
+	return e
+}
+
 func (e event) SetFormatter(formatter Formatter) Event {
+	if formatter == nil {
+		formatter = &Console{}
+	}
 	e.formatter = formatter
 	return e
 }
 
 func (e event) SetExporter(exporter Exporter) Event {
+	if exporter == nil {
+		exporter = &StdoutExporter{}
+	}
 	e.exporter = exporter
 	return e
 }
@@ -196,7 +211,7 @@ func (e event) Emergency() Event {
 
 // Msg emits a log event message.
 func (e event) Msg(message string) {
-	if e.level >= e.minLevel {
+	if e.level >= e.minLevel && e.filter.CanWrite(e) {
 		e.message = message
 		e.exporter.Export(e.formatter.Format(e))
 	}
@@ -204,7 +219,7 @@ func (e event) Msg(message string) {
 
 // Fmt emits a formatted log event message.
 func (e event) Fmt(format string, args ...interface{}) {
-	if e.level >= e.minLevel {
+	if e.level >= e.minLevel && e.filter.CanWrite(e) {
 		e.message = fmt.Sprintf(format, args...)
 		e.exporter.Export(e.formatter.Format(e))
 	}
