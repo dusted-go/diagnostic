@@ -211,7 +211,7 @@ func (e event) Emergency() Event {
 
 // Msg emits a log event message.
 func (e event) Msg(message string) {
-	if e.level >= e.minLevel && e.filter.CanWrite(e) {
+	if e.level >= e.minLevel && e.filter.CanWrite(e.message) {
 		e.message = message
 		e.exporter.Export(e.formatter.Format(e))
 	}
@@ -219,8 +219,10 @@ func (e event) Msg(message string) {
 
 // Fmt emits a formatted log event message.
 func (e event) Fmt(format string, args ...interface{}) {
-	if e.level >= e.minLevel && e.filter.CanWrite(e) {
+	if e.level >= e.minLevel {
 		e.message = fmt.Sprintf(format, args...)
-		e.exporter.Export(e.formatter.Format(e))
+		if e.filter.CanWrite(e.message) {
+			e.exporter.Export(e.formatter.Format(e))
+		}
 	}
 }

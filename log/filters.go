@@ -1,11 +1,11 @@
 package log
 
 type Filter interface {
-	CanWrite(e event) bool
+	CanWrite(msg string) bool
 }
 
 type NoFilter struct{}
 
-func (f *NoFilter) CanWrite(e event) bool {
+func (f *NoFilter) CanWrite(_ string) bool {
 	return true
 }
