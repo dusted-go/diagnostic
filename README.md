@@ -1,10 +1,12 @@
 # Diagnostic
 
-The worst library for Stackdriver logging and tracing:
+This Go package is a personal project for Google Cloud Logging.
 
-- Not the fastest
-- Not the most feature rich
-- Not optimised for performance
-- Just plain simple
+I would not recommend anyone else to use this code because it is...
 
-Diagnostic is a plain boring, simple, easy to read and understand Go module for Stackdriver logging and tracing mainly written for my own personal use in projects which are not Netflix and can afford 1 extra millisecond to write a log.
+- not the fastest
+- not the most feature rich
+- not optimised for performance
+- just plain simple for my personal needs
+
+Diagnostic is a plain simple, boring, easy to read and easy to understand Go module for Google Cloud Logging and Tracing. Nothing fancy to see here.
